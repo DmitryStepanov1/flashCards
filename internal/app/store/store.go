@@ -2,6 +2,7 @@ package store
 
 import (
 	"database/sql"
+	"net/http"
 
 	_ "github.com/lib/pq"
 )
@@ -49,4 +50,36 @@ func (s *Store) Card() *CardRepository {
 	}
 
 	return s.cardRepository
+}
+
+// Add card
+func (s *Store) AddCard(w http.ResponseWriter, req *http.Request) {
+
+	card := req.URL.Query().Get("card")
+	translate := req.URL.Query().Get("translate")
+
+	sqlStatement := `
+		INSERT INTO cards (card, trasnlate)
+		VALUES ($1, $2)`
+	_, err := s.db.Exec(sqlStatement, card, translate)
+	if err != nil {
+		panic(err)
+	}
+
+}
+
+// List cards
+func (s *Store) ListCards(w http.ResponseWriter, req *http.Request) {
+
+	card := req.URL.Query().Get("card")
+	translate := req.URL.Query().Get("translate")
+
+	sqlStatement := `
+		INSERT INTO cards (card, trasnlate)
+		VALUES ($1, $2)`
+	_, err := s.db.Exec(sqlStatement, card, translate)
+	if err != nil {
+		panic(err)
+	}
+
 }
