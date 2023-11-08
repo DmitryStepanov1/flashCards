@@ -1,7 +1,6 @@
 package apiserver
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 
@@ -57,8 +56,7 @@ func (s *APIServer) configureLogger() error {
 
 func (s *APIServer) configureRouter() {
 	s.router.HandleFunc("/hello", s.handleHello())
-	s.router.HandleFunc("/addcard", s.store.AddCard)
-	//s.router.HandleFunc("/listcards", s.store.ListCards())
+	s.router.HandleFunc("/listcards", s.store.ListCards())
 
 }
 
@@ -75,7 +73,6 @@ func (s *APIServer) configureStore() error {
 
 func (s *APIServer) handleHello() http.HandlerFunc {
 
-	fmt.Println("Hi there")
 	return func(w http.ResponseWriter, r *http.Request) {
 		io.WriteString(w, "Hi there. Follow the white rabbit")
 	}

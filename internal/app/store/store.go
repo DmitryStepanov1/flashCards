@@ -2,8 +2,10 @@ package store
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
+	"github.com/DmitryStepanov1/flashCards/internal/app/model"
 	_ "github.com/lib/pq"
 )
 
@@ -52,34 +54,29 @@ func (s *Store) Card() *CardRepository {
 	return s.cardRepository
 }
 
-// Add card
-func (s *Store) AddCard(w http.ResponseWriter, req *http.Request) {
-
-	card := req.URL.Query().Get("card")
-	translate := req.URL.Query().Get("translate")
-
-	sqlStatement := `
-		INSERT INTO cards (card, trasnlate)
-		VALUES ($1, $2)`
-	_, err := s.db.Exec(sqlStatement, card, translate)
-	if err != nil {
-		panic(err)
-	}
-
-}
-
 // List cards
-func (s *Store) ListCards(w http.ResponseWriter, req *http.Request) {
+func (s *Store) ListCards() http.HandlerFunc {
 
-	card := req.URL.Query().Get("card")
-	translate := req.URL.Query().Get("translate")
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	sqlStatement := `
-		INSERT INTO cards (card, trasnlate)
-		VALUES ($1, $2)`
-	_, err := s.db.Exec(sqlStatement, card, translate)
-	if err != nil {
-		panic(err)
+		var cards []model.Card
+
+		rows, err := s.db.Query("SELECT * FROM fc_test.cards")
+
+		if err != nil {
+			panic(err)
+		}
+
+		defer rows.Close()
+
+		for rows.Next() {
+			var card model.Card
+			if err := rows.Scan(&card.ID, &card.Word, &card.Translate); err != nil {
+				fmt.Println(err)
+			}
+			cards = append(cards, card)
+		}
+		fmt.Println(cards)
 	}
 
 }
