@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestUserRepository_Create(t *testing.T) {
+func TestCardRepository_Create(t *testing.T) {
 	s, teardown := store.TestStore(t, databaseURL)
 	defer teardown("cards")
 
@@ -20,4 +20,14 @@ func TestUserRepository_Create(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotNil(t, c)
+}
+
+func TestCardRepository_FindByWord(t *testing.T) {
+	s, teardown := store.TestStore(t, databaseURL)
+	defer teardown("cards")
+
+	word := "ttt"
+	_, err := s.Card().FindByWord(word)
+
+	assert.Error(t, err)
 }

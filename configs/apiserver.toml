@@ -3,4 +3,4 @@ log_level = "debug"
 
 
 [store]
-database_url = "host=localhost dbname=fc_dev sslmode=disable"
+database_url = "host=localhost dbname=fc_test sslmode=disable"
